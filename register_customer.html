@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>병원어때 : 고객 회원가입</title>
+    <link rel="stylesheet" href="css/register.css">
+</head>
+<body>
+    <!-- header -->
+    <div id="header">
+        <a href='login.html' target="_blank" ><img src="assets/rural_hospital_access.jpg" id="logo" ></a>
+    </div>
+
+    <!-- wrapper -->
+    <div id="wrapper">
+
+        <!-- content-->
+        <div id="content">
+
+            <!-- ID -->
+            <div>
+                <h3 class="join_title">
+                    <label for="id">이메일</label>
+                </h3>
+                <span class="box int_id">
+                    <input type="text" id="id" class="int" maxlength="20">
+                </span>
+                <span class="error_next_box"></span>
+            </div>
+
+            <!-- PW1 -->
+            <div>
+                <h3 class="join_title"><label for="pswd1">비밀번호</label></h3>
+                <span class="box int_pass">
+                    <input type="text" id="pswd1" class="int" maxlength="20">
+                    <span id="alertTxt">사용불가</span>
+
+                </span>
+                <span class="error_next_box"></span>
+            </div>
+
+            <!-- PW2 -->
+            <div>
+                <h3 class="join_title"><label for="pswd2">비밀번호 재확인</label></h3>
+                <span class="box int_pass_check">
+                    <input type="text" id="pswd2" class="int" maxlength="20">
+          
+                </span>
+                <span class="error_next_box"></span>
+            </div>
+
+            <!-- NAME -->
+            <div>
+                <h3 class="join_title"><label for="name">이름</label></h3>
+                <span class="box int_name">
+                    <input type="text" id="name" class="int" maxlength="20">
+                </span>
+                <span class="error_next_box"></span>
+            </div>
+
+            <!-- BIRTH -->
+            <div>
+                <h3 class="join_title"><label for="yy">생년월일</label></h3>
+
+                <div id="bir_wrap">
+                    <!-- BIRTH_YY -->
+                    <div id="bir_yy">
+                        <span class="box">
+                            <input type="text" id="yy" class="int" maxlength="4" placeholder="년(4자)">
+                        </span>
+                    </div>
+
+                    <!-- BIRTH_MM -->
+                    <div id="bir_mm">
+                        <span class="box">
+                            <select id="mm" class="sel">
+                                <option>월</option>
+                                <option value="01">1</option>
+                                <option value="02">2</option>
+                                <option value="03">3</option>
+                                <option value="04">4</option>
+                                <option value="05">5</option>
+                                <option value="06">6</option>
+                                <option value="07">7</option>
+                                <option value="08">8</option>
+                                <option value="09">9</option>                                    
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                            </select>
+                        </span>
+                    </div>
+
+                    <!-- BIRTH_DD -->
+                    <div id="bir_dd">
+                        <span class="box">
+                            <input type="text" id="dd" class="int" maxlength="2" placeholder="일">
+                        </span>
+                    </div>
+
+                </div>
+                <span class="error_next_box"></span>    
+            </div>
+
+            <!-- GENDER -->
+            <div>
+                <h3 class="join_title"><label for="gender">성별</label></h3>
+                <span class="box gender_code">
+                    <select id="gender" class="sel">
+                        <option>성별</option>
+                        <option value="M">남자</option>
+                        <option value="F">여자</option>
+                    </select>                            
+                </span>
+                <span class="error_next_box">필수 정보입니다.</span>
+            </div>
+
+            <!-- MOBILE -->
+            <div>
+                <h3 class="join_title"><label for="phoneNo">휴대전화</label></h3>
+                <span class="box int_mobile">
+                    <input type="tel" id="mobile" class="int" maxlength="16" placeholder="전화번호 입력">
+                </span>
+                <span class="error_next_box"></span>    
+            </div>
+
+
+            <!-- JOIN BTN-->
+            <div class="btn_area">
+                <button type="button" onclick="newuser();" id="btnJoin">
+                    <span>가입하기</span>
+                </button>
+            </div>
+
+        </div> 
+        <!-- content-->
+
+    </div> 
+    <!-- wrapper -->
+</body>
+    <script src="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.js"></script>
+    <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
+
+    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-app.js"></script>
+
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-firestore.js"></script>
+    <script>
+         const firebaseConfig = {
+            apiKey: "AIzaSyAB8BAMAXuBH44-Uu6UkrTlhRtLcL6QAQ8",
+            authDomain: "se-hospitalappointment.firebaseapp.com",
+            databaseURL: "https://se-hospitalappointment-default-rtdb.firebaseio.com",
+            projectId: "se-hospitalappointment",
+            storageBucket: "se-hospitalappointment.appspot.com",
+            messagingSenderId: "321287658057",
+            appId: "1:321287658057:web:c1124ce42859ef95e93d98",
+            measurementId: "G-GX0TRLKZW2"
+        };
+        firebase.initializeApp(firebaseConfig);
+        let firestore = firebase.firestore();
+        let ref = firestore.collection('User');
+
+        function newuser() {
+            let email = document.getElementById('id').value;
+            let new_pw_1 = document.getElementById('pswd1').value;
+            let new_pw_2 = document.getElementById('pswd2').value;
+            let name = document.getElementById('name').value;
+            let birthYear =  document.getElementById('yy').value;
+            let birthMonth =  document.getElementById('mm').value;
+            let birthDay =  document.getElementById('dd').value;
+            let gender =  document.getElementById('gender').value;
+            let mobile =  document.getElementById('mobile').value;
+
+            if (new_pw_1 != new_pw_2) {
+                alert("확인 비밀번호가 다릅니다.")
+            } else {
+                firebase.auth().createUserWithEmailAndPassword(email, new_pw_2)
+                    .then(() => {
+                        alert('회원가입이 완료되었습니다.')
+                        window.history.back();
+                    })
+                    .catch(function (error) {
+                        var errorCode = error.code;
+                        var errorMessage = error.message;
+                        alert(error.code)
+                    });
+            }      
+
+            ref.doc(email).set(
+                {
+
+                    "email" : email,
+                    "password" : new_pw_2,
+                    "birthDay" : birthDay,
+                    "birthMonth" :birthMonth,
+                    "birthYear" : birthYear,
+                    "gender" : gender,
+                    "phoneNum" : mobile
+            
+                  } 
+            ).then(function(docRef){
+                console.log("Documnet written with ID", docRef.id);
+            })
+            .catch(function(error){
+                console.error("Error adding document", error);
+            });
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Admin Page</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script>
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic"
+        rel="stylesheet" type="text/css" />
+    <!-- Third party plugin CSS-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css"
+        rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="css/admin_styles.css" rel="stylesheet" />
+</head>
+
+<body id="page-top">
+    <!-- Navigation-->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand js-scroll-trigger" href="#page-top">관리자용</a>
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+                data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
+                aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto my-2 my-lg-0">
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#history">예약관리</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#change">예약변경</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#chat">상담하기</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Masthead-->
+    <header class="masthead">
+        <div class="header bg-gradient-primary pb-8 pt-5 pt-md-8">
+            <div class="container-fluid">
+                <div class="header-body">
+                    <!-- Card stats -->
+                    <div class="row">
+                        <div class="col-xl-4 col-lg-6">
+                            <div class="card card-stats mb-4 mb-xl-0">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h5 class="card-title text-uppercase text-muted mb-0">예약대기/예약확인</h5>
+                                            <br>
+                                            <span id="waitConfirm" class="h2 font-weight-bold mb-0"></span>
+                                        </div>
+                                        <div class="col-auto">
+                                            <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-lg-6">
+                            <div class="card card-stats mb-4 mb-xl-0">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h5 class="card-title text-uppercase text-muted mb-0">이번달 예약수</h5>
+                                            <br>
+                                            <span id="monthResCount" class="h2 font-weight-bold mb-0"></span>
+                                        </div>
+                                        <div class="col-auto">
+                                            <div class="icon icon-shape bg-yellow text-white rounded-circle shadow">
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </header>
+
+    <!-- Services-->
+    <section class="page-section" id="history">
+        <div id="resTable">
+            <h2 class="text-center mt-0">예약목록</h2>
+            <hr class="divider my-4" />
+            <!-- <div class="row"> -->               
+            <table id="mytable" class="table table-striped custom-table">
+                <thead>
+                    <form >
+                        <select id="changeState">
+                            <option value="waiting">대기</option>
+                            <option value="confirm">확정</option>
+                            <option value="cancel">취소</option>
+                            <option value="noShow">노쇼</option>
+                            <option value="change">변경</option>
+                        </select>
+                    </form>&emsp;
+                    <input class ="btn btn-dark btn-xl "type="button" id="changeBtn" value="변경하기" onclick="changeBtn_click();" />
+                    <tr>
+                        <th>
+                            <input type="checkbox" name="headCheckbox" id="checkAll" />
+                        </th>
+                        <th class="table-th">목록</th>
+                        <th>예약번호</th>
+                        <th class="table-th">환자</th>
+                        <th class="table-th">예약자</th>
+                        <th class="table-th">예약일</th>
+                        <th class="table-th">예약 날짜</th>
+                        <th class="table-th">관계</th>
+                        <th>증상</th>
+                        <th>상태</th>
+                    </tr>
+
+                </thead>
+                <tbody id="list">
+
+                    </tr>
+                </tbody>
+                <tfoot>
+
+                </tfoot>
+            </table>
+
+        </div>
+
+    </section>
+    <!-- Portfolio-->
+    <section class="page-section bg-primary3" id="change">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 text-center">
+                    <h2 class="text-white mt-0">예약 변경하기</h2>
+                    <hr class="divider light my-4" />
+                    <h5 class="text-white mt-0">※예약 날짜와 시간 확인 후 변경해주세요!</h2>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="page-section">
+        <div id="chaTable">
+            <h2 class="text-center mt-0">예약 변경</h2>
+            <hr class="divider my-4" />
+            <!-- <div class="row"> -->
+            <table id="mytable" class="table table-striped custom-table">
+                <thead>
+                    <input class="btn btn-dark btn-xl" type="button" id="OKBtn" value="승인" onclick="OKBtn_click();" />&emsp;
+                    <input class="btn btn-dark btn-xl" type="button" id="NOBtn" value="거절" onclick="NOBtn_click();" />
+                    <tr>
+                        <th>
+                            <input type="checkbox" name="headCheckbox" id="checkAll" />
+                        </th>
+                        <th class="table-th">예약번호</th>
+                        <th class="table-th">예약자</th>
+                        <th class="table-th">예약날짜</th>
+                        <th class="table-th">예약시간</th>
+                        <th class="table-th">변경날짜</th>
+                        <th class="table-th">변경시간</th>
+
+                    </tr>
+
+                </thead>
+                <tbody id="changeList">
+
+                    </tr>
+                </tbody>
+                <tfoot>
+
+                </tfoot>
+            </table>
+            <!-- </div> -->
+        </div>
+
+    </section>
+    <!-- Contact-->
+    <section class="page-section bg-primary4" id="chat">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 text-center">
+                    <h2 class="text-white mt-0">상담하러가기</h2>
+                    <hr class="divider light my-4" />
+                    <h5 class="text-white mt-0">※1:1 문의를 확인해보세요!</h2>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="page-section" id="contact">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <p style="font-weight: bold;">채팅하기</p>
+                <i class="fas fa-envelope fa-3x mb-3 text-muted" onClick="location.href='http://localhost:8080/'"></i>
+            </div>
+        </div>
+    </section> 
+
+    
+    <!-- Footer-->
+    <footer class="bg-light py-5">
+        <div class="container">
+            <div class="small text-center text-muted">
+                Copyright &copy;
+                <!-- This script automatically adds the current year to your website footer-->
+                <!-- (credit: https://updateyourfooter.com/)-->
+                <script>
+                    document.write(new Date().getFullYear());
+                </script>
+                - Software Engineering Team_10
+                <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+                <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-analytics.js"></script>
+            </div>
+        </div>
+    </footer>
+    <!-- Bootstrap core JS-->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Third party plugin JS-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>
+    <!-- Core theme JS-->
+    <script src="js/scripts.js"></script>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-storage.js"></script>
+    <script id="adminScript">
+
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAB8BAMAXuBH44-Uu6UkrTlhRtLcL6QAQ8",
+            authDomain: "se-hospitalappointment.firebaseapp.com",
+            databaseURL: "https://se-hospitalappointment-default-rtdb.firebaseio.com",
+            projectId: "se-hospitalappointment",
+            storageBucket: "se-hospitalappointment.appspot.com",
+            messagingSenderId: "321287658057",
+            appId: "1:321287658057:web:c1124ce42859ef95e93d98",
+            measurementId: "G-GX0TRLKZW2"
+        };
+        firebase.initializeApp(firebaseConfig);
+        let firestore = firebase.firestore();
+
+        const table = document.querySelector("#list");
+        const resRef = firestore.collection('Patient');
+        const chaRef = firestore.collection('Change');
+
+        var index = 0;
+        var ID = "stateSelect";
+
+        function getToday() {
+            var date = new Date();
+            var year = date.getFullYear();
+            var month = ("0" + (1 + date.getMonth())).slice(-2);
+            var day = ("0" + date.getDate()).slice(-2);
+
+            return year + "-" + month + "-" + day;
+        }
+        console.log("오늘의 날짜는", getToday());
+
+        function get_waitConfirm() {
+            $('#waitConfirm').text('');
+            var waitCnt = 0;
+            var confirmCnt = 0;
+            var today = getToday();
+
+            resRef.where('date', '==', today).onSnapshot(function (querySnapshot) {
+                querySnapshot.forEach(function (doc) {
+                    const data = doc.data();
+                    if (data.state == "waiting")
+                    {
+                        waitCnt++;
+                    }
+                    if (data.state = "confirm")
+                    {
+                        confirmCnt++;
+                    }
+                })
+                $('#waitConfirm').text(waitCnt + "/" + confirmCnt);
+
+                console.log("대기중", waitCnt);
+                 console.log("확정", confirmCnt);
+            })
+        }
+        function get_month_cnt()
+        {
+            var date = new Date();
+            var year = date.getFullYear();
+            var month = ("0" + (1 + date.getMonth())).slice(-2);
+            var day = ("0" + date.getDate()).slice(-2);
+
+            var today = year + "-" + month + "-" + day;
+
+            var monthCnt = 1;
+
+            var next = year + "-" + month+1 + "-" + "01";
+            var pre = year + "-" + month + "-"+"01";
+
+            resRef.get().then(function (querySnapshot) {
+                querySnapshot.forEach(function (doc) {
+                    const data = doc.data();
+                    if (data.date>=pre && data.date<next )
+                    {
+                        monthCnt++;
+                    }
+                })
+                $('#monthResCount').text(monthCnt);
+
+            })
+
+        }
+
+        get_waitConfirm();
+        get_month_cnt();
+
+        //=========================Get reservation history from Firebase=====================
+        function add_reservation(num, res_num, patient_name, reserver_name, reserved_day, reserved_time, relation, symptom, state) {
+            let row = `<tr>\
+            <td><input type="checkbox" name = "check""/></td>\
+            <td>${num}</td>\
+            <td>${res_num}</td>\
+            <td>${patient_name}</td>\
+            <td>${reserver_name}</td>\
+            <td>${reserved_day}</td>\ 
+            <td>${reserved_time}</td>\ 
+            <td>${relation}</td>\ 
+            <td>${symptom}</td>\ 
+            <td>${state}</td>\ 
+            </tr>`;
+            $('#list').append(row);
+        }
+
+        function get_reservation() {
+            $('#list').html('');
+            index = 1;
+            resRef.get().then(function (querySnapshot) {
+                querySnapshot.forEach(function (doc) {
+                    const data = doc.data();
+                    add_reservation(index++, doc.id, data.patient_name, data.reserve_name, data.date,
+                        data.time, data.relation, data.symptom, data.state);
+
+                })
+            })
+        }
+        get_reservation()
+
+        //====== 체크박스 전체 선택 전체 해제 ========
+        $(function () {
+            // 1 . #checkAll 클릭
+            $("#checkAll").click(function () {
+                // 2. #checkAll이 체크되었을 때,
+                // check라는 name을 가진 input태그를 찾아 checked를 true로 정의
+                if ($("#checkAll").prop("checked")) {
+                    $("input[name=check]").prop("checked", true)
+                    // 3. #checkAll이 체크되지 않았을 때,
+                    // check라는 name을 가진 input태그를 찾아 checked를 false로 정의
+                } else {
+                    $("input[name=check]").prop("checked", false)
+                }
+            })
+        });
+
+
+        //====================== 예약 관리 버튼 리스터 ========================
+        //체크되어 있는 애의 값을 셀렉트에 있는 값으로 바꿔주고 
+        //파이어스토어에 변한 값 저장 
+        function changeBtn_click() {   // 1 . #changeBtn 클릭
+            var rowData = new Array();
+            var tdArr = new Array();
+            var checkbox = $('input[name = check]:checked')
+            let state = $("#changeState option:selected").val();
+
+            checkbox.each(function (i) {
+                var tr = checkbox.parent().parent().eq(i);
+                var td = tr.children();
+
+                var res_num = td.eq(2).text();
+                resRef.doc(res_num).update({ state: state })
+            })
+            get_reservation()
+            get_waitConfirm()
+        }
+
+        //오늘 날짜 스트링으로 받아와서 예약 내역에서 오늘 날짜인 예약 가져오기 
+        //대기 / 확정
+        //00 / 00
+        //이번달 예약 가져오기 → 이번 달만
+
+
+        console.log("여기까지는 ㅇㅋ 1");
+
+        function add_change(num, reserver_name, reserved_day, reserved_time, chan_date, chan_time) {
+            let row_c = `<tr>\
+            <td><input type="checkbox" name = "check1""/></td>\
+            <td>${num}</td>\
+            <td>${reserver_name}</td>\
+            <td>${reserved_day}</td>\
+            <td>${reserved_time}</td>\
+            <td>${chan_date}</td>\ 
+            <td>${chan_time}</td>\ 
+            </tr>`;
+            $('#changeList').append(row_c);
+            console.log("여기까지는 ㅇㅋ 3");
+
+        }
+
+        function get_change() {
+            $('#changeList').html('');
+            index = 1;
+            chaRef.get().then(function (querySnapshot) {
+                console.log("여기까지는 ㅇㅋ 2");
+                querySnapshot.forEach(function (doc) {
+                    const data = doc.data();
+
+                    resRef.get().then(function (querySnapshot) {
+                        querySnapshot.forEach(function (ddd) {
+                            const d = ddd.data();
+                            if (ddd.id == data.reservation_number)
+                                add_change(data.reservation_number, d.reserve_name, d.date, d.time, data.change_date, data.change_time);
+                        })
+                    });
+                })
+            })
+        }
+        get_change()
+        get_waitConfirm()
+
+        //승인눌렀을때 
+        //Patient에 바꿔서 저장해주고 change에서 삭제 
+        //get_change()
+        function OKBtn_click() {
+            const FieldValue = firestore.FieldValue;
+            var rowData = new Array();
+            var tdArr = new Array();
+            var checkbox1 = $('input[name = check1]:checked');
+
+            checkbox1.each(function (i) {
+                var tr = checkbox1.parent().parent().eq(i);
+                var td = tr.children();
+                var res_num = td.eq(1).text();
+                chaRef.get().then(function (querySnapshot) {
+                    querySnapshot.forEach(function (doc) {
+                        const data = doc.data();
+
+                        if (data.reservation_number == res_num) {
+                            chaRef.doc(doc.id).delete();
+                            resRef.doc(res_num).update({ date: data.change_date, time: data.change_time });
+                        }
+                    })
+                })
+
+
+            })
+            get_change();
+            get_reservation();
+            get_waitConfirm()
+        }
+        //거절 눌렀을 때
+        //change에서 삭제해주고 
+        //가능하면 서버에서 메세지 보내주기 "예약변경이 취소됐습니다"
+        //get_change()
+        function NOBtn_click() {
+            var rowData = new Array();
+            var tdArr = new Array();
+            var checkbox1 = $('input[name = check1]:checked');
+
+            checkbox1.each(function (i) {
+                var tr = checkbox1.parent().parent().eq(i);
+                var td = tr.children();
+                var res_num = td.eq(1).text();
+                chaRef.get().then(function (querySnapshot) {
+                    querySnapshot.forEach(function (doc) {
+                        const data = doc.data();
+                        if (data.reservation_number == res_num) {
+                            chaRef.doc(doc.id).delete();
+                        }
+                    })
+                })
+            })
+            get_change();
+            get_reservation();
+            get_waitConfirm()
+        }
+    
+    </script>
+</body>
+        
+</html>

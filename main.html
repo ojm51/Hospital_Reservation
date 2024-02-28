@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <title>Hospital Reservation</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        body {
+            background-image : url(assets/browser-background.png);
+            background-repeat: no-repeat;
+            background-size:cover;
+            margin-top: 100px;
+            font-family: 'Trebuchet MS', serif;
+            line-height: 1.6
+
+        }
+
+        .container {
+            width: 500px;
+            margin: 0 auto;
+        }
+
+        ul.tabs {
+            margin: 0px;
+            padding: 0px;
+            list-style: none;
+        }
+
+        ul.tabs li {
+            background: #dfe5ff;
+            color: #222;
+            display: inline-block;
+            padding: 10px 15px;
+            cursor: pointer;
+        }
+
+        ul.tabs li.current {
+            background: #f6f7ff;
+            color: #222;
+        }
+
+        .tab-content {
+            display: none;
+            background: #f6f7ff;
+            padding: 15px;
+        }
+
+        .tab-content.current {
+            display: inherit;
+        }
+    </style>
+</head>
+
+<body background="rural_hospital_access.jpg">
+    <!-- 네비게이션 바 시작 -->
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <!-- 네비게이션 바 끝 -->
+
+    <!-- 가입 폼 시작 -->
+    <div class="container">
+        <h1>로그인 해주세요!</h1>
+        <div class="container">
+
+            <ul class="tabs">
+                <li class="tab-link current" data-tab="tab-1">고객</li>
+                <li class="tab-link" data-tab="tab-2">관리자</li>
+            </ul>
+
+            <div id="tab-1" class="tab-content current">
+                <div class="form-group">
+                    <label for="email">이메일:</label>
+                    <input type="email" class="form-control" id="cus_email">
+                </div>
+
+                <div class="form-group">
+                    <label for="pwd">비밀번호:</label>
+                    <input type="password" class="form-control" id="cus_pwd">
+                </div>
+
+                <button id="tab1_btn" type="button" class="btn btn-default login" onclick="cus_login()">로그인</button>
+                <button type="button" class="btn btn-default login" onClick="location.href='register_customer.html'">회원가입</button>
+            </div>
+        </div>
+        <div id="tab-2" class="tab-content">
+            <div class="form-group">
+                <label for="email">이메일:</label>
+                <input type="email" class="form-control" id="admin_email">
+            </div>
+
+            <div class="form-group">
+                <label for="pwd">비밀번호:</label>
+                <input type="password" class="form-control" id="admin_pwd">
+            </div>
+            <button id="tab2_btn" type="button" class="btn btn-default login" onclick="admin_login()">로그인</button>
+            <button type="button" class="btn btn-default login" onClick="location.href='register_admin.html'">회원가입</button>
+        </div>
+    </div>
+    </div>
+
+    <!-- 가입 폼 끝 -->
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-storage.js"></script>
+
+    <script>
+        var firebaseEmailAuth; //파이어베이스 email 인증 모듈 전역변수
+        var firebaseDatabase; //파이어베이스 db 모듈 전역변수
+        var userInfo; //가입한 유저의 정보. object 타입
+
+        //파이어 베이스 초기화 코드
+        const firebaseConfig = {
+            apiKey: "AIzaSyAB8BAMAXuBH44-Uu6UkrTlhRtLcL6QAQ8",
+            authDomain: "se-hospitalappointment.firebaseapp.com",
+            databaseURL: "https://se-hospitalappointment-default-rtdb.firebaseio.com",
+            projectId: "se-hospitalappointment",
+            storageBucket: "se-hospitalappointment.appspot.com",
+            messagingSenderId: "321287658057",
+            appId: "1:321287658057:web:c1124ce42859ef95e93d98",
+            measurementId: "G-GX0TRLKZW2"
+        };
+        firebase.initializeApp(firebaseConfig);
+        let firestore = firebase.firestore();
+        let adminRef = firestore.collection('Admin');
+        let customerRef = firestore.collection('User');
+
+
+        $(document).ready(function () {
+            $('ul.tabs li').click(function () {
+                var tab_id = $(this).attr('data-tab');
+
+                $('ul.tabs li').removeClass('current');
+                $('.tab-content').removeClass('current');
+
+                $(this).addClass('current');
+                $("#" + tab_id).addClass('current');
+            })
+        });
+        //================================ 로그인 ==================================
+        //고객로그인
+        function cus_login() {
+
+            //제이쿼리 선택자와 val() 함수를 이용해서 이메일,비밀번호 값을 가져온다. 
+            var email = $('#cus_email').val();
+            var password = $('#cus_pwd').val();
+
+            customerRef.where('email', '==', email).onSnapshot(function (querySnapshot) {
+                querySnapshot.forEach(function (doc) {
+                    const data = doc.data();
+                    if (doc.id == email)
+                    {alert("로그인 성공");
+                     location.href = 'customer_page.html';
+                     }
+                     else
+                     alert("로그인 실패")
+                })
+          
+            })
+        }
+
+        //관리자 로그인
+        function admin_login() {
+
+            //제이쿼리 선택자와 val() 함수를 이용해서 이메일,비밀번호 값을 가져온다. 
+            var email = $('#admin_email').val();
+            var password = $('#admin_pwd').val();
+            adminRef.where('email', '==', email).onSnapshot(function (querySnapshot) {
+                querySnapshot.forEach(function (doc) {
+                    const data = doc.data();
+                    if (doc.id == email)
+                    {alert("로그인 성공");
+                     location.href = 'admin_page.html';
+                }
+            
+                })
+          
+            })
+
+           
+        }
+
+    </script>
+
+
+</body>
+
+</html>
